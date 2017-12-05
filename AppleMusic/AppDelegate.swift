@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ZFMediaPlayer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
+    
+    let mediaPlayerManager = ZFMediaPlayerManager.shared()
+    mediaPlayerManager.requestAuthorization {
+      [weak self] (authorized) in
+      guard let `self` = self else { return }
+      if authorized {
+        ZFToast.show("授权成功")
+      } else {
+        ZFToast.show("授权失败")
+      }
+    }
+    
+    ZFMediaPlayerManager.shared().musicNowPlayingItemDidChangeHandler = {
+      [weak self] (item) in
+      guard let `self` = self else { return }
+      debugPrint("player: musicNowPlayingItemDidChange \(item?.title, item?.playbackStoreID)")
+    }
+    ZFMediaPlayerManager.shared().musicPlaybackStateDidChangeHandler = {
+      [weak self] (item) in
+      guard let `self` = self else { return }
+      debugPrint("player: musicPlaybackStateDidChangeHandler \(ZFMediaPlayerManager.shared().playbackState)")
+    }
+    
     return true
   }
 

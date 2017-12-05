@@ -21,7 +21,7 @@ public enum ZFMediaPlayerType: Int {
   case application
 }
 
-var mediaPlayerType: ZFMediaPlayerType = .application
+var mediaPlayerType: ZFMediaPlayerType = .system
 
 private var cloudServiceControllerKey = "cloudServiceControllerKey"
 

@@ -40,12 +40,11 @@ class ViewController: UIViewController {
       debugPrint("did select \(data)")
       let storeIDs = self.getStoreIDs(indexPath: indexPath)
       ZFMediaPlayerManager.shared().playQueueWithStoreIDs(storeIDs)
+//      ZFMediaPlayerManager.shared().playQueueWithStoreIDs(["311169153"])
     }
     
     view.addSubview(listView)
     _ = listView.autoPinEdgesToSuperviewEdges(with: .zero)
-    
-    refresh.startTopRefreshing()
     
     ZFMediaPlayerManager.shared().requestStorefrontIdentifier {
       [weak self] (countryCode) in
@@ -53,6 +52,8 @@ class ViewController: UIViewController {
       debugPrint("countryCode == \(String(describing: countryCode))")
       if let countryCode = countryCode {
         ZFToast.show("当前国家支持 \(countryCode)")
+        
+        refresh.startTopRefreshing()
       } else {
         ZFToast.show("当前国家不支持")
       }
@@ -75,14 +76,10 @@ fileprivate extension ViewController {
     songIDs = songs.map { (song) -> String in
       return "\(song.trackId)"
     }
-    
-    print("ids == \(songIDs)")
 
     var result: [String] = []
     result += subArray(songIDs, range: NSRange(location: indexPath.row, length: songs.count - 1))
     result += subArray(songIDs, range: NSRange(location: 0, length: indexPath.row))
-    
-    print("result == \(result)")
     
     return result
   }

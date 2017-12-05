@@ -26,9 +26,12 @@ class SonglistClient: ZFListClient<ZFSong> {
       "media" : "music",
       "limit" : 9
       ] as [String : Any];
-    if let countryCode = ZFMediaPlayerManager.shared().countryCode {
-      parameters["country"] = countryCode
+    
+    guard let countryCode = ZFMediaPlayerManager.shared().countryCode else {
+      assertionFailure("countryCode should not be nil")
+      return
     }
+    parameters["country"] = countryCode
     
     Alamofire.request("https://itunes.apple.com/search",
                       method: .get,

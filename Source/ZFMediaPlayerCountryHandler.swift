@@ -35,7 +35,7 @@ extension ZFMediaPlayerCountryHandler {
 fileprivate extension ZFMediaPlayerCountryHandler {
   
   func setup() {
-    guard let plistURL = Bundle.main.url(forResource: "CountryCodes", withExtension: "plist")
+    guard let plistURL = Bundle(for: ZFMediaPlayerCountryHandler.self).url(forResource: "CountryCodes", withExtension: "plist")
       else { return }
     guard let dic = NSDictionary(contentsOf: plistURL)
       else { return }
