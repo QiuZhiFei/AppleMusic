@@ -16,6 +16,7 @@
 		0B9849031FD157C700C4BD8B /* SonglistClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9849021FD157C700C4BD8B /* SonglistClient.swift */; };
 		0B9849051FD157D300C4BD8B /* ZFSong.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9849041FD157D300C4BD8B /* ZFSong.swift */; };
 		0B98490B1FD1596700C4BD8B /* ZFToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B98490A1FD1596700C4BD8B /* ZFToastView.swift */; };
+		0B98490E1FD66FFA00C4BD8B /* Array+ZFKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B98490D1FD66FFA00C4BD8B /* Array+ZFKit.swift */; };
 		59125449EDCEA3E48AA87E9F /* Pods_AppleMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3357ACE8EB22EEA6150EEF14 /* Pods_AppleMusic.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		0B9849021FD157C700C4BD8B /* SonglistClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SonglistClient.swift; sourceTree = "<group>"; };
 		0B9849041FD157D300C4BD8B /* ZFSong.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZFSong.swift; sourceTree = "<group>"; };
 		0B98490A1FD1596700C4BD8B /* ZFToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZFToastView.swift; sourceTree = "<group>"; };
+		0B98490D1FD66FFA00C4BD8B /* Array+ZFKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+ZFKit.swift"; sourceTree = "<group>"; };
 		3357ACE8EB22EEA6150EEF14 /* Pods_AppleMusic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppleMusic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		630C119BAC3DB9A179FC2A9A /* Pods-AppleMusic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppleMusic.release.xcconfig"; path = "Pods/Target Support Files/Pods-AppleMusic/Pods-AppleMusic.release.xcconfig"; sourceTree = "<group>"; };
 		812019DBE8D7CE012CEB83DA /* Pods-AppleMusic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppleMusic.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AppleMusic/Pods-AppleMusic.debug.xcconfig"; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				0B9849041FD157D300C4BD8B /* ZFSong.swift */,
 				0B9848F21FD1554300C4BD8B /* Main.storyboard */,
 				0B98490A1FD1596700C4BD8B /* ZFToastView.swift */,
+				0B98490D1FD66FFA00C4BD8B /* Array+ZFKit.swift */,
 				0B9848F51FD1554300C4BD8B /* Assets.xcassets */,
 				0B9848F71FD1554300C4BD8B /* LaunchScreen.storyboard */,
 				0B9848FA1FD1554300C4BD8B /* Info.plist */,
@@ -249,6 +252,7 @@
 				0B98490B1FD1596700C4BD8B /* ZFToastView.swift in Sources */,
 				0B9848F11FD1554300C4BD8B /* ViewController.swift in Sources */,
 				0B9848EF1FD1554300C4BD8B /* AppDelegate.swift in Sources */,
+				0B98490E1FD66FFA00C4BD8B /* Array+ZFKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

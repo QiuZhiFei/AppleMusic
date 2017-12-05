@@ -35,9 +35,11 @@ class ViewController: UIViewController {
       return cell
     }
     listView.didSelectRowHandler = {
-      (tableView, indexPath, data) in
+      [weak self] (tableView, indexPath, data) in
+      guard let `self` = self else { return }
       debugPrint("did select \(data)")
-      ZFMediaPlayerManager.shared().playQueueWithStoreIDs(<#T##storeIDs: [String]##[String]#>)
+      let storeIDs = self.getStoreIDs(indexPath: indexPath)
+      ZFMediaPlayerManager.shared().playQueueWithStoreIDs(storeIDs)
     }
     
     view.addSubview(listView)
@@ -65,3 +67,24 @@ class ViewController: UIViewController {
 
 }
 
+fileprivate extension ViewController {
+  
+  func getStoreIDs(indexPath: IndexPath) -> [String] {
+    let songs = client.songs
+    var songIDs: [String] = []
+    songIDs = songs.map { (song) -> String in
+      return "\(song.trackId)"
+    }
+    
+    print("ids == \(songIDs)")
+
+    var result: [String] = []
+    result += subArray(songIDs, range: NSRange(location: indexPath.row, length: songs.count - 1))
+    result += subArray(songIDs, range: NSRange(location: 0, length: indexPath.row))
+    
+    print("result == \(result)")
+    
+    return result
+  }
+  
+}

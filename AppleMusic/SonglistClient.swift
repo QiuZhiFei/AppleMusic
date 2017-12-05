@@ -14,7 +14,7 @@ import SwiftyJSON
 
 class SonglistClient: ZFListClient<ZFSong> {
   
-  var songs: [ZFSong] = []
+  internal fileprivate(set) var songs: [ZFSong] = []
   
   override func loadTop(page: Int, handler: (([ZFSong], Error?) -> ())?) {
     super.loadTop(page: page, handler: handler)
@@ -43,6 +43,7 @@ class SonglistClient: ZFListClient<ZFSong> {
             }
           }
         }
+        self.songs = songs
         if let handler = handler {
           handler(songs, response.error)
         }
