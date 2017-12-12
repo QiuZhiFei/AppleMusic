@@ -1,6 +1,6 @@
 //
 //  ZFMediaPlayerManager.swift
-//  DoubanRadio
+//  
 //
 //  Created by ZhiFei on 2017/9/7.
 //  Copyright © 2017年 ZhiFei. All rights reserved.
@@ -10,15 +10,24 @@ import Foundation
 import MediaPlayer
 import StoreKit
 
-public enum ZFMusicPlayMode : Int {
+@objc public enum ZFMusicPlayMode : Int {
   case normal = 0 // 顺序播放
   case `repeat` // 单曲循环播放
   case shuffle // 按歌曲随机播放
   case shuffleAlbums // 按专辑随机播放
 }
-public enum ZFMediaPlayerType: Int {
+
+@objc public enum ZFMediaPlayerType: Int {
   case system = 0
   case application
+}
+
+@objc public enum ZFMusicAuthorizationType : Int {
+  case notDetermined = 0
+  case denied
+  case restricted
+  case authorized
+  case unknown
 }
 
 var mediaPlayerType: ZFMediaPlayerType = .system
@@ -27,12 +36,13 @@ private var cloudServiceControllerKey = "cloudServiceControllerKey"
 
 open class ZFMediaPlayerManager: NSObject {
   
-  open var musicPlaybackStateDidChangeHandler: ((MPMusicPlaybackState)->())?
+  open var musicPlaybackStateDidChangeHandler: ((_ newState: MPMusicPlaybackState, _ oldState: MPMusicPlaybackState)->())?
   open var musicNowPlayingItemDidChangeHandler: ((MPMediaItem?)->())?
   open var musicVolumeDidChangeHandler: (()->())?
   
   open fileprivate(set) var countryCode: String?
   open fileprivate(set) var storeIDs: [String] = []
+  open fileprivate(set) var authorizationType: ZFMusicAuthorizationType = .unknown
   
   var defaultPlayMode: ZFMusicPlayMode = .normal
   
@@ -55,6 +65,7 @@ open class ZFMediaPlayerManager: NSObject {
     return self.musicPlayer.playbackState
   }
   
+  fileprivate var musicPlaybackState: MPMusicPlaybackState = .stopped
   fileprivate var intrinsicPlayMode: ZFMusicPlayMode?
   fileprivate var musicPlayer: MPMusicPlayerController!
   
@@ -110,7 +121,9 @@ extension ZFMediaPlayerManager {
   open func requestAuthorization(_ handler: ((_ authorized: Bool)->())?) {
     if #available(iOS 9.3, *) {
       SKCloudServiceController.requestAuthorization {
-        (status) in
+        [weak self] (status) in
+        guard let `self` = self else { return }
+        self.updateAuthorizationType(status: status)
         if let handler = handler {
           DispatchQueue.main.async {
             handler(status == .authorized)
@@ -226,8 +239,9 @@ fileprivate extension ZFMediaPlayerManager {
   
   @objc func musicPlaybackStateDidChange(_ noti: Notification?) {
     if let handler = self.musicPlaybackStateDidChangeHandler {
-      handler(self.musicPlayer.playbackState)
+      handler(self.playbackState, self.musicPlaybackState)
     }
+    self.musicPlaybackState = self.playbackState
   }
   @objc func musicNowPlayingItemDidChange(_ noti: Notification?) {
     if let handler = self.musicNowPlayingItemDidChangeHandler {
@@ -259,6 +273,22 @@ fileprivate extension ZFMediaPlayerManager {
       self.musicPlayer.shuffleMode = .albums
       self.musicPlayer.repeatMode = .none
     }
+  }
+  
+  @available(iOS 9.3, *)
+  func updateAuthorizationType(status: SKCloudServiceAuthorizationStatus) {
+    var type: ZFMusicAuthorizationType = .unknown
+    switch status {
+    case .notDetermined:
+      type = .notDetermined
+    case .denied:
+      type = .denied
+    case .restricted:
+      type = .restricted
+    case .authorized:
+      type = .authorized
+    }
+    self.authorizationType = type
   }
   
 }

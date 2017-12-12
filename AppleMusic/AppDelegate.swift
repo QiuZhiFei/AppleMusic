@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ZFMediaPlayerManager.shared().musicNowPlayingItemDidChangeHandler = {
       [weak self] (item) in
       guard let `self` = self else { return }
-      debugPrint("player: musicNowPlayingItemDidChange \(item?.title, item?.playbackStoreID)")
+      debugPrint("player: musicNowPlayingItemDidChange \(item?.title, item?.appleID)")
     }
     ZFMediaPlayerManager.shared().musicPlaybackStateDidChangeHandler = {
       [weak self] (item) in
