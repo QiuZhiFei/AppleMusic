@@ -8,7 +8,7 @@ PODS:
   - PureLayout (3.0.2)
   - SwiftyJSON (3.1.4)
   - ZFListView (0.0.2)
-  - ZFMediaPlayer (0.0.2)
+  - ZFMediaPlayer (0.0.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5.0)
@@ -32,7 +32,7 @@ SPEC CHECKSUMS:
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   ZFListView: 47707f38e3531b2342d69a90fbe37f351d3bc39e
-  ZFMediaPlayer: 1c369cf10b7a6e2722e0cc0810e8669d7555eb9f
+  ZFMediaPlayer: a3c6fb36339bbc3cdc738cb883070abaf62b0c43
 
 PODFILE CHECKSUM: 16e3b83c5761a40699ef56621938fb4b79107913
 

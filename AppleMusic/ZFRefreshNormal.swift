@@ -78,7 +78,6 @@ class ZFListViewRefreshNormal: NSObject, ZFListViewRefresh {
     footer?.setTitle("正在加载", for: .refreshing)
     footer?.setTitle("准备加载", for: .willRefresh)
     footer?.setTitle("没有更多", for: .noMoreData)
-    footer?.isAutomaticallyHidden = true
     self.tableView.mj_footer = footer
   }
   

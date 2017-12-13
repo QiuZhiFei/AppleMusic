@@ -27,7 +27,7 @@ class SonglistClient: ZFListClient<ZFSong> {
       "limit" : 9
       ] as [String : Any];
     
-    guard let countryCode = ZFMediaPlayerManager.shared().countryCode else {
+    guard let countryCode = ZFMediaPlayerManager.shared.countryCode else {
       assertionFailure("countryCode should not be nil")
       return
     }

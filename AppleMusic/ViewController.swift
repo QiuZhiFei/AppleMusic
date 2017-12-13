@@ -39,14 +39,14 @@ class ViewController: UIViewController {
       guard let `self` = self else { return }
       debugPrint("did select \(data)")
       let storeIDs = self.getStoreIDs(indexPath: indexPath)
-      ZFMediaPlayerManager.shared().playQueueWithStoreIDs(storeIDs)
-//      ZFMediaPlayerManager.shared().playQueueWithStoreIDs(["311169153"])
+      ZFMediaPlayerManager.shared.playQueueWithStoreIDs(storeIDs)
+//      ZFMediaPlayerManager.shared.playQueueWithStoreIDs(["311169153"])
     }
     
     view.addSubview(listView)
     _ = listView.autoPinEdgesToSuperviewEdges(with: .zero)
     
-    ZFMediaPlayerManager.shared().requestStorefrontIdentifier {
+    ZFMediaPlayerManager.shared.requestStorefrontIdentifier {
       [weak self] (countryCode) in
       guard let `self` = self else { return }
       debugPrint("countryCode == \(String(describing: countryCode))")

@@ -23,11 +23,17 @@ import StoreKit
 }
 
 @objc public enum ZFMusicAuthorizationType : Int {
-  case notDetermined = 0
-  case denied
-  case restricted
-  case authorized
-  case unknown
+  case notDetermined = 0 // 没有请求授权
+  case denied // 用户不允许授权
+  case restricted // 不应该提示授权
+  case authorized // 用户允许授权
+}
+
+public extension NSNotification {
+  static let musicPlaybackStateDidChange = Notification.Name("com.zf.musicPlaybackStateDidChange")
+  static let musicNowPlayingItemDidChange = Notification.Name("com.zf.musicNowPlayingItemDidChange")
+  static let musicVolumeDidChange = Notification.Name("com.zf.musicVolumeDidChange")
+  static let cloudServiceCapabilitiesTypeDidChange = Notification.Name("com.zf.cloudServiceCapabilitiesTypeDidChange")
 }
 
 var mediaPlayerType: ZFMediaPlayerType = .system
@@ -36,13 +42,15 @@ private var cloudServiceControllerKey = "cloudServiceControllerKey"
 
 open class ZFMediaPlayerManager: NSObject {
   
+  open static let shared = ZFMediaPlayerManager()
+  
   open var musicPlaybackStateDidChangeHandler: ((_ newState: MPMusicPlaybackState, _ oldState: MPMusicPlaybackState)->())?
   open var musicNowPlayingItemDidChangeHandler: ((MPMediaItem?)->())?
   open var musicVolumeDidChangeHandler: (()->())?
+  open var cloudServiceCapabilitiesTypeDidChangeHandler: ((ZFCloudServiceCapabilityType)->())?
   
   open fileprivate(set) var countryCode: String?
   open fileprivate(set) var storeIDs: [String] = []
-  open fileprivate(set) var authorizationType: ZFMusicAuthorizationType = .unknown
   
   var defaultPlayMode: ZFMusicPlayMode = .normal
   
@@ -64,11 +72,20 @@ open class ZFMediaPlayerManager: NSObject {
   open var playbackState: MPMusicPlaybackState {
     return self.musicPlayer.playbackState
   }
+  open var cloudServiceCapabilitiesType: ZFCloudServiceCapabilityType {
+    return self.cloudServiceCapabilities.type
+  }
+  open var playMode: ZFMusicPlayMode {
+    if let intrinsicPlayMode = self.intrinsicPlayMode {
+      return intrinsicPlayMode
+    }
+    return self.defaultPlayMode
+  }
   
   fileprivate var musicPlaybackState: MPMusicPlaybackState = .stopped
   fileprivate var intrinsicPlayMode: ZFMusicPlayMode?
   fileprivate var musicPlayer: MPMusicPlayerController!
-  
+  fileprivate var cloudServiceCapabilities = ZFCloudServiceCapability()
   @available(iOS 9.3, *)
   fileprivate var cloudServiceController: SKCloudServiceController {
     set {
@@ -84,19 +101,6 @@ open class ZFMediaPlayerManager: NSObject {
     }
   }
   
-  open var playMode: ZFMusicPlayMode {
-    if let intrinsicPlayMode = self.intrinsicPlayMode {
-      return intrinsicPlayMode
-    }
-    return self.defaultPlayMode
-  }
-  
-  private static var manager: ZFMediaPlayerManager!
-  open static func shared() -> ZFMediaPlayerManager {
-    manager = manager ?? ZFMediaPlayerManager()
-    return manager
-  }
-  
   override init() {
     super.init()
     
@@ -105,6 +109,15 @@ open class ZFMediaPlayerManager: NSObject {
       self.musicPlayer = MPMusicPlayerController.systemMusicPlayer()
     case .application:
       self.musicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    }
+    
+    self.cloudServiceCapabilities.typeChangeHandler = {
+      [weak self] in
+      guard let `self` = self else { return }
+      if let handler = self.cloudServiceCapabilitiesTypeDidChangeHandler {
+        handler(self.cloudServiceCapabilities.type)
+      }
+      NotificationCenter.default.post(name: NSNotification.cloudServiceCapabilitiesTypeDidChange, object: nil)
     }
     
     self.musicPlayer.beginGeneratingPlaybackNotifications()
@@ -118,12 +131,33 @@ open class ZFMediaPlayerManager: NSObject {
 
 extension ZFMediaPlayerManager {
   
+  open static func authorizationType() -> ZFMusicAuthorizationType  {
+    if #available(iOS 9.3, *) {
+      let type = ZFMediaPlayerManager.getAuthorizationType(status: SKCloudServiceController.authorizationStatus())
+      return type
+    } else {
+      return .notDetermined
+    }
+  }
+  
+  // 请求授权
   open func requestAuthorization(_ handler: ((_ authorized: Bool)->())?) {
+    debugPrint("请求授权")
+    
+    let type = ZFMediaPlayerManager.authorizationType()
+    if type != .notDetermined {
+      if let handler = handler {
+        handler(type == .authorized)
+      }
+      return
+    }
+    
     if #available(iOS 9.3, *) {
       SKCloudServiceController.requestAuthorization {
         [weak self] (status) in
         guard let `self` = self else { return }
-        self.updateAuthorizationType(status: status)
+        debugPrint("requestAuthorization status: \(status.rawValue), cur status: \(ZFMediaPlayerManager.authorizationType().rawValue)")
+        self.requestCapabilities()
         if let handler = handler {
           DispatchQueue.main.async {
             handler(status == .authorized)
@@ -134,16 +168,27 @@ extension ZFMediaPlayerManager {
       debugPrint("\(#file): \(#line) \(#function) requires iOS 9.3 or later")
     }
   }
+  
+  // 获取当前功能
   open func requestCapabilities() {
+    debugPrint("请求功能")
+    if ZFMediaPlayerManager.authorizationType() != .authorized {
+      return
+    }
     if #available(iOS 9.3, *) {
       self.cloudServiceController.requestCapabilities {
-        (capability, err) in
-        //
+        [weak self] (cloudServiceCapabilities, err) in
+        guard let `self` = self else { return }
+        debugPrint("requestCapabilities: \(cloudServiceCapabilities), err: \(err)")
+        DispatchQueue.main.async {
+          self.cloudServiceCapabilities.configure(capability: cloudServiceCapabilities, err: err)
+        }
       }
     } else {
       debugPrint("\(#file): \(#line) \(#function) requires iOS 9.3 or later")
     }
   }
+  
   open func requestStorefrontIdentifier(_ handler: ((String?)->())?) {
     if #available(iOS 9.3, *) {
       self.cloudServiceController.requestStorefrontIdentifier {
@@ -242,16 +287,21 @@ fileprivate extension ZFMediaPlayerManager {
       handler(self.playbackState, self.musicPlaybackState)
     }
     self.musicPlaybackState = self.playbackState
+    NotificationCenter.default.post(name: NSNotification.musicPlaybackStateDidChange, object: nil)
   }
+  
   @objc func musicNowPlayingItemDidChange(_ noti: Notification?) {
     if let handler = self.musicNowPlayingItemDidChangeHandler {
       handler(self.musicPlayer.nowPlayingItem)
     }
+    NotificationCenter.default.post(name: NSNotification.musicNowPlayingItemDidChange, object: nil)
   }
+  
   @objc func musicVolumeDidChange(_ noti: Notification?) {
     if let handler = self.musicVolumeDidChangeHandler {
       handler()
     }
+    NotificationCenter.default.post(name: NSNotification.musicVolumeDidChange, object: nil)
   }
   
 }
@@ -276,19 +326,17 @@ fileprivate extension ZFMediaPlayerManager {
   }
   
   @available(iOS 9.3, *)
-  func updateAuthorizationType(status: SKCloudServiceAuthorizationStatus) {
-    var type: ZFMusicAuthorizationType = .unknown
+  static func getAuthorizationType(status: SKCloudServiceAuthorizationStatus) -> ZFMusicAuthorizationType {
     switch status {
     case .notDetermined:
-      type = .notDetermined
+      return .notDetermined
     case .denied:
-      type = .denied
+      return .denied
     case .restricted:
-      type = .restricted
+      return .restricted
     case .authorized:
-      type = .authorized
+      return .authorized
     }
-    self.authorizationType = type
   }
   
 }

@@ -37,6 +37,7 @@ extension ZFMediaPlayerManager: SKCloudServiceSetupViewControllerDelegate {
     var setupOptions: [SKCloudServiceSetupOptionsKey: Any] = [
       .action: SKCloudServiceSetupAction.subscribe
     ]
+    setupOptions[.iTunesItemIdentifier] = "playlists"
     if #available(iOS 11.0, *) {
       setupOptions[.messageIdentifier] = SKCloudServiceSetupMessageIdentifier.playMusic
     }
