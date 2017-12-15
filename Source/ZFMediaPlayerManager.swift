@@ -12,7 +12,7 @@ import StoreKit
 
 @objc public enum ZFMusicPlayMode : Int {
   case normal = 0 // 顺序播放
-  case `repeat` // 单曲循环播放
+  case single // 单曲循环播放
   case shuffle // 按歌曲随机播放
   case shuffleAlbums // 按专辑随机播放
 }
@@ -37,6 +37,7 @@ public extension NSNotification {
 }
 
 var mediaPlayerType: ZFMediaPlayerType = .system
+var defaultPlayMode: ZFMusicPlayMode = .normal
 
 private var cloudServiceControllerKey = "cloudServiceControllerKey"
 
@@ -51,8 +52,6 @@ open class ZFMediaPlayerManager: NSObject {
   
   open fileprivate(set) var countryCode: String?
   open fileprivate(set) var storeIDs: [String] = []
-  
-  var defaultPlayMode: ZFMusicPlayMode = .normal
   
   open var nowPlayerType: ZFMediaPlayerType {
     if self.musicPlayer == MPMusicPlayerController.systemMusicPlayer() {
@@ -76,14 +75,11 @@ open class ZFMediaPlayerManager: NSObject {
     return self.cloudServiceCapabilities.type
   }
   open var playMode: ZFMusicPlayMode {
-    if let intrinsicPlayMode = self.intrinsicPlayMode {
-      return intrinsicPlayMode
-    }
-    return self.defaultPlayMode
+    return self.getPlayMode()
   }
   
   fileprivate var musicPlaybackState: MPMusicPlaybackState = .stopped
-  fileprivate var intrinsicPlayMode: ZFMusicPlayMode?
+  fileprivate var configuredPlayMode: ZFMusicPlayMode?
   fileprivate var musicPlayer: MPMusicPlayerController!
   fileprivate var cloudServiceCapabilities = ZFCloudServiceCapability()
   @available(iOS 9.3, *)
@@ -227,7 +223,7 @@ extension ZFMediaPlayerManager {
     //    self.musicPlayer.prepareToPlay()
   }
   open func play() {
-    self.updatePlayModeIfNeeded()
+    self.updatePlayMode(self.playMode)
     self.musicPlayer.play()
   }
   
@@ -261,8 +257,8 @@ extension ZFMediaPlayerManager {
   }
   
   open func configure(playMode: ZFMusicPlayMode) {
-    self.intrinsicPlayMode = playMode
-    self.updatePlayModeIfNeeded()
+    self.configuredPlayMode = playMode
+    self.updatePlayMode(playMode)
   }
   
   open func removeItem() {
@@ -308,12 +304,30 @@ fileprivate extension ZFMediaPlayerManager {
 
 fileprivate extension ZFMediaPlayerManager {
   
-  func updatePlayModeIfNeeded() {
-    switch self.playMode {
+  func getPlayMode() -> ZFMusicPlayMode {
+    guard let configuredPlayMode = configuredPlayMode else {
+      return defaultPlayMode
+    }
+    if self.musicPlayer.repeatMode == .one {
+      return .single
+    }
+    if self.musicPlayer.shuffleMode == .songs
+      && self.musicPlayer.repeatMode == .none {
+      return .shuffle
+    }
+    if self.musicPlayer.shuffleMode == .albums
+      && self.musicPlayer.repeatMode == .none {
+      return .shuffleAlbums
+    }
+    return .normal
+  }
+  
+  func updatePlayMode(_ playMode: ZFMusicPlayMode) {
+    switch playMode {
     case .normal:
       self.musicPlayer.shuffleMode = .off
       self.musicPlayer.repeatMode = .all
-    case .repeat:
+    case .single:
       self.musicPlayer.shuffleMode = .off
       self.musicPlayer.repeatMode = .one
     case .shuffle:
