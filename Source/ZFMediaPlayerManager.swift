@@ -141,6 +141,10 @@ extension ZFMediaPlayerManager {
     debugPrint("请求授权")
     
     let type = ZFMediaPlayerManager.authorizationType()
+    
+    if type == .authorized {
+      self.requestCapabilities()
+    }
     if type != .notDetermined {
       if let handler = handler {
         handler(type == .authorized)
@@ -279,6 +283,9 @@ extension ZFMediaPlayerManager {
 fileprivate extension ZFMediaPlayerManager {
   
   @objc func musicPlaybackStateDidChange(_ noti: Notification?) {
+    if self.cloudServiceCapabilitiesType != .playback {
+      return
+    }
     if let handler = self.musicPlaybackStateDidChangeHandler {
       handler(self.playbackState, self.musicPlaybackState)
     }
@@ -287,6 +294,9 @@ fileprivate extension ZFMediaPlayerManager {
   }
   
   @objc func musicNowPlayingItemDidChange(_ noti: Notification?) {
+    if self.cloudServiceCapabilitiesType != .playback {
+      return
+    }
     if let handler = self.musicNowPlayingItemDidChangeHandler {
       handler(self.musicPlayer.nowPlayingItem)
     }
