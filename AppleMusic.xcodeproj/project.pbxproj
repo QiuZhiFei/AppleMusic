@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B6019731FEBC00D00AD309E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6019721FEBC00D00AD309E /* AccountViewController.swift */; };
 		0B9848EF1FD1554300C4BD8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9848EE1FD1554300C4BD8B /* AppDelegate.swift */; };
 		0B9848F11FD1554300C4BD8B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9848F01FD1554300C4BD8B /* ViewController.swift */; };
 		0B9848F41FD1554300C4BD8B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B9848F21FD1554300C4BD8B /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B6019721FEBC00D00AD309E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		0B9848EB1FD1554300C4BD8B /* AppleMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppleMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B9848EE1FD1554300C4BD8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0B9848F01FD1554300C4BD8B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			children = (
 				0B9848EE1FD1554300C4BD8B /* AppDelegate.swift */,
 				0B9848F01FD1554300C4BD8B /* ViewController.swift */,
+				0B6019721FEBC00D00AD309E /* AccountViewController.swift */,
 				0B9849001FD157B700C4BD8B /* ZFRefreshNormal.swift */,
 				0B9849021FD157C700C4BD8B /* SonglistClient.swift */,
 				0B9849041FD157D300C4BD8B /* ZFSong.swift */,
@@ -248,6 +251,7 @@
 			files = (
 				0B9849011FD157B700C4BD8B /* ZFRefreshNormal.swift in Sources */,
 				0B9849051FD157D300C4BD8B /* ZFSong.swift in Sources */,
+				0B6019731FEBC00D00AD309E /* AccountViewController.swift in Sources */,
 				0B9849031FD157C700C4BD8B /* SonglistClient.swift in Sources */,
 				0B98490B1FD1596700C4BD8B /* ZFToastView.swift in Sources */,
 				0B9848F11FD1554300C4BD8B /* ViewController.swift in Sources */,

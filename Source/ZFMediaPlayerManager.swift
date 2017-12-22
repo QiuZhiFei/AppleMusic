@@ -39,6 +39,9 @@ public extension NSNotification {
 var mediaPlayerType: ZFMediaPlayerType = .system
 var defaultPlayMode: ZFMusicPlayMode = .normal
 
+public var musicAffiliateToken: String?
+public var musicCampaignToken: String?
+
 private var cloudServiceControllerKey = "cloudServiceControllerKey"
 
 open class ZFMediaPlayerManager: NSObject {
@@ -208,6 +211,14 @@ extension ZFMediaPlayerManager {
 }
 
 extension ZFMediaPlayerManager {
+  
+  open static func configure(affiliateToken: String?) {
+    musicAffiliateToken = affiliateToken
+  }
+  
+  open static func configure(campaignToken: String?) {
+    musicCampaignToken = campaignToken
+  }
   
   open func configure(countryCode: String?) {
     self.countryCode = countryCode

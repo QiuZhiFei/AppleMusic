@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     
+    ZFMediaPlayerManager.configure(affiliateToken: nil)
+    ZFMediaPlayerManager.configure(campaignToken: nil)
+    
     let type = ZFMediaPlayerManager.authorizationType()
     debugPrint("authorizationType: \(type.rawValue)")
     switch type {

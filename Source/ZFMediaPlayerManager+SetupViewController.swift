@@ -41,6 +41,14 @@ extension ZFMediaPlayerManager: SKCloudServiceSetupViewControllerDelegate {
     if #available(iOS 11.0, *) {
       setupOptions[.messageIdentifier] = SKCloudServiceSetupMessageIdentifier.playMusic
     }
+    if #available(iOS 10.3, *) {
+      if let token = musicAffiliateToken {
+        setupOptions[.affiliateTokenKey] = token
+      }
+      if let token = musicCampaignToken {
+        setupOptions[.campaignTokenKey] = token
+      }
+    }
     setupViewController.load(options: setupOptions) { (a, b) in
       if let handler = handler {
         handler(setupViewController)
