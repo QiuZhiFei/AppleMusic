@@ -34,6 +34,7 @@ public extension NSNotification {
   static let musicNowPlayingItemDidChange = Notification.Name("com.zf.musicNowPlayingItemDidChange")
   static let musicVolumeDidChange = Notification.Name("com.zf.musicVolumeDidChange")
   static let cloudServiceCapabilitiesTypeDidChange = Notification.Name("com.zf.cloudServiceCapabilitiesTypeDidChange")
+  static let musicPlayErrorNotification = Notification.Name("musicPlayErrorNotification")
 }
 
 var mediaPlayerType: ZFMediaPlayerType = .system
@@ -239,6 +240,14 @@ extension ZFMediaPlayerManager {
   }
   open func play() {
     self.updatePlayMode(self.playMode)
+    if #available(iOS 10.1, *) {
+      self.musicPlayer.prepareToPlay { (err) in
+        if let err = err {
+          NotificationCenter.default.post(name: NSNotification.musicPlayErrorNotification, object: err)
+          return
+        }
+      }
+    }
     self.musicPlayer.play()
   }
   
