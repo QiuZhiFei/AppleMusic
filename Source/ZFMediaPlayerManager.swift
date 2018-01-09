@@ -51,6 +51,7 @@ open class ZFMediaPlayerManager: NSObject {
   
   open var musicPlaybackStateDidChangeHandler: ((_ newState: MPMusicPlaybackState, _ oldState: MPMusicPlaybackState)->())?
   open var musicNowPlayingItemDidChangeHandler: ((MPMediaItem?)->())?
+  open var musicPlayErrorHandler: ((Error)->())?
   open var musicVolumeDidChangeHandler: (()->())?
   open var cloudServiceCapabilitiesTypeDidChangeHandler: ((ZFCloudServiceCapabilityType)->())?
   
@@ -386,6 +387,9 @@ fileprivate extension ZFMediaPlayerManager {
   }
   
   func handlePrepareToPlayError(err: Error) {
+    if let handler = self.musicPlayErrorHandler {
+      handler(err)
+    }
     NotificationCenter.default.post(name: NSNotification.musicPlayErrorNotification, object: err)
     
     #if DEBUG
