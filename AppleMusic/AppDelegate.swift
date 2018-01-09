@@ -79,6 +79,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       debugPrint("player: musicPlaybackStateDidChangeHandler \(ZFMediaPlayerManager.shared.playbackState)")
     }
     
+    NotificationCenter.default
+      .addObserver(forName: NSNotification.musicPlayErrorNotification,
+                   object: nil,
+                   queue: OperationQueue.main) {
+                    [weak self] (noti) in
+                    guard let `self` = self else { return }
+                    if let err = noti.object, let error = err as? NSError {
+                      print("err = \(error)")
+                    }
+    }
+    
     return true
   }
   
