@@ -31,7 +31,7 @@ extension ZFMediaPlayerManager: SKCloudServiceSetupViewControllerDelegate {
   }
   
   @available(iOS 10.1, *)
-  open func getSubscribeVC(handler: ((SKCloudServiceSetupViewController)->())?) {
+  open func getSubscribeVC(handler: ((SKCloudServiceSetupViewController?, Error?)->())?) {
     let setupViewController = SKCloudServiceSetupViewController()
     setupViewController.delegate = self
     var setupOptions: [SKCloudServiceSetupOptionsKey: Any] = [
@@ -49,16 +49,19 @@ extension ZFMediaPlayerManager: SKCloudServiceSetupViewControllerDelegate {
         setupOptions[.campaignTokenKey] = token
       }
     }
-    setupViewController.load(options: setupOptions) { (a, b) in
+    setupViewController.load(options: setupOptions) { (didSucceedLoading, error) in
       if let handler = handler {
-        handler(setupViewController)
+        handler(didSucceedLoading ? setupViewController: nil, error)
       }
     }
   }
   
   @available(iOS 10.1, *)
   public func cloudServiceSetupViewControllerDidDismiss(_ cloudServiceSetupViewController: SKCloudServiceSetupViewController) {
-    print("dismiss")
+    debugPrint("cloudServiceSetupViewController dismiss")
+    if let handler = self.setupVCDidDismissHandler {
+      handler(cloudServiceSetupViewController)
+    }
   }
   
 }

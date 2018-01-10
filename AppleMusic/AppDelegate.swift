@@ -42,9 +42,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint("Capabilities: 可以订阅，或许可以免费适用三月")
         if #available(iOS 10.1, *) {
           mediaPlayerManager.getSubscribeVC(handler: {
-            [weak self] (setupVC) in
+            [weak self] (setupVC, err) in
             guard let `self` = self else { return }
-            self.window?.rootViewController?.present(setupVC, animated: true, completion: nil)
+            if let setupVC = setupVC {
+              self.window?.rootViewController?.present(setupVC, animated: true, completion: nil)
+              return
+            }
+            ZFToast.show("apple music 注册页面加载失败", animated: true)
+            debugPrint("getSubscribeVC err == \(String(describing: err))")
           })
         }
       case .playback:
@@ -77,6 +82,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       [weak self] (item) in
       guard let `self` = self else { return }
       debugPrint("player: musicPlaybackStateDidChangeHandler \(ZFMediaPlayerManager.shared.playbackState)")
+    }
+    if #available(iOS 10.1, *) {
+      ZFMediaPlayerManager.shared.setupVCDidDismissHandler = {
+        [weak self] (setupVC) in
+        guard let `self` = self else { return }
+        debugPrint("setupVC dismiss")
+      }
     }
     
     NotificationCenter.default
