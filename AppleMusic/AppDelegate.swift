@@ -74,19 +74,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     ZFMediaPlayerManager.shared.musicNowPlayingItemDidChangeHandler = {
-      [weak self] (item) in
-      guard let `self` = self else { return }
-      debugPrint("player: musicNowPlayingItemDidChange \(item?.title, item?.appleID)")
+      (item) in
+      debugPrint("player: musicNowPlayingItemDidChange \(String(describing: item?.zf_description))")
     }
     ZFMediaPlayerManager.shared.musicPlaybackStateDidChangeHandler = {
-      [weak self] (item) in
-      guard let `self` = self else { return }
+      (item) in
       debugPrint("player: musicPlaybackStateDidChangeHandler \(ZFMediaPlayerManager.shared.playbackState)")
     }
     if #available(iOS 10.1, *) {
       ZFMediaPlayerManager.shared.setupVCDidDismissHandler = {
-        [weak self] (setupVC) in
-        guard let `self` = self else { return }
+        (setupVC) in
         debugPrint("setupVC dismiss")
       }
     }

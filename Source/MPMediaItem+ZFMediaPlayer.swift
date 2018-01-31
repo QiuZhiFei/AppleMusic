@@ -18,4 +18,8 @@ public extension MPMediaItem {
     }
   }
   
+  var zf_description: String {
+    return "MPMediaItem, id: \(self.appleID), title: \(self.title), playbackDuration: \(self.playbackDuration)"
+  }
+  
 }
