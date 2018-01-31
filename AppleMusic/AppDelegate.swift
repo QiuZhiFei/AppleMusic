@@ -79,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     ZFMediaPlayerManager.shared.musicPlaybackStateDidChangeHandler = {
       (item) in
-      debugPrint("player: musicPlaybackStateDidChangeHandler \(ZFMediaPlayerManager.shared.playbackState)")
+      debugPrint("player: musicPlaybackStateDidChangeHandler \(ZFMediaPlayerManager.shared.playbackState.rawValue)")
     }
     if #available(iOS 10.1, *) {
       ZFMediaPlayerManager.shared.setupVCDidDismissHandler = {
@@ -92,8 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       .addObserver(forName: NSNotification.musicPlayErrorNotification,
                    object: nil,
                    queue: OperationQueue.main) {
-                    [weak self] (noti) in
-                    guard let `self` = self else { return }
+                    (noti) in
                     if let err = noti.object, let error = err as? NSError {
                       print("err = \(error)")
                     }
