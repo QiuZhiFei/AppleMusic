@@ -75,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     ZFMediaPlayerManager.shared.musicNowPlayingItemDidChangeHandler = {
       (item) in
-      debugPrint("player: musicNowPlayingItemDidChange \(String(describing: item?.zf_description))")
+      debugPrint("player: musicNowPlayingItemDidChange: \(String(describing: item?.zf_description)), index: \(ZFMediaPlayerManager.shared.indexOfNowPlayingItem)")
     }
     ZFMediaPlayerManager.shared.musicPlaybackStateDidChangeHandler = {
       (item) in

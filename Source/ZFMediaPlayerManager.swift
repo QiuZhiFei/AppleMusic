@@ -254,6 +254,26 @@ extension ZFMediaPlayerManager {
     self.musicPlayer.play()
   }
   
+  open func playQueueWithStoreIDs(_ storeIDs: [String], startItemID: String) {
+    var startIndex = NSNotFound
+    if let index = storeIDs.index(of: startItemID) {
+      startIndex = index
+    }
+    self.playQueueWithStoreIDs(storeIDs, startIndex: startIndex)
+  }
+  
+  open func playQueueWithStoreIDs(_ storeIDs: [String], startIndex: Int) {
+    if #available(iOS 10.1, *) {
+      self.storeIDs = storeIDs
+      let descriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: storeIDs)
+      if startIndex < storeIDs.count {
+        descriptor.startItemID = storeIDs[startIndex]
+      }
+      self.musicPlayer.setQueueWith(descriptor)
+      self.play()
+    }
+  }
+  
   open func playQueueWithStoreIDs(_ storeIDs: [String]) {
     self.setQueueWithStoreIDs(storeIDs)
     self.play()
