@@ -240,14 +240,16 @@ extension ZFMediaPlayerManager {
     //    self.musicPlayer.prepareToPlay()
   }
   open func play() {
-    self.updatePlayMode(self.playMode)
-    if #available(iOS 10.1, *) {
-      self.musicPlayer.prepareToPlay {
-        [weak self] (err) in
-        guard let `self` = self else { return }
-        if let err = err {
-          self.handlePrepareToPlayError(err: err)
-          return
+    if self.storeIDs.count > 0 {
+      self.updatePlayMode(self.playMode)
+      if #available(iOS 10.1, *) {
+        self.musicPlayer.prepareToPlay {
+          [weak self] (err) in
+          guard let `self` = self else { return }
+          if let err = err {
+            self.handlePrepareToPlayError(err: err)
+            return
+          }
         }
       }
     }
@@ -413,39 +415,39 @@ fileprivate extension ZFMediaPlayerManager {
     NotificationCenter.default.post(name: NSNotification.musicPlayErrorNotification, object: err)
     
     #if DEBUG
-      if let error = err as? NSError {
-        let errorCode = error.code
-        if #available(iOS 9.3, *) {
-          if errorCode == MPError.unknown.rawValue {
-            debugPrint("musicPlayErrorNotification: unknown")
-          }
-          if errorCode == MPError.permissionDenied.rawValue {
-            debugPrint("musicPlayErrorNotification: permissionDenied")
-          }
-          if errorCode == MPError.cloudServiceCapabilityMissing.rawValue {
-            debugPrint("musicPlayErrorNotification: cloudServiceCapabilityMissing")
-          }
-          if errorCode == MPError.networkConnectionFailed.rawValue {
-            debugPrint("musicPlayErrorNotification: networkConnectionFailed")
-          }
-          if errorCode == MPError.notFound.rawValue {
-            debugPrint("musicPlayErrorNotification: notFound")
-          }
-          if errorCode == MPError.notSupported.rawValue {
-            debugPrint("musicPlayErrorNotification: notSupported")
-          }
+    if let error = err as? NSError {
+      let errorCode = error.code
+      if #available(iOS 9.3, *) {
+        if errorCode == MPError.unknown.rawValue {
+          debugPrint("musicPlayErrorNotification: unknown")
         }
-        if #available(iOS 10.1, *) {
-          if errorCode == MPError.cancelled.rawValue {
-            debugPrint("musicPlayErrorNotification: cancelled")
-          }
+        if errorCode == MPError.permissionDenied.rawValue {
+          debugPrint("musicPlayErrorNotification: permissionDenied")
         }
-        if #available(iOS 10.3, *) {
-          if errorCode == MPError.requestTimedOut.rawValue {
-            debugPrint("musicPlayErrorNotification: requestTimedOut")
-          }
+        if errorCode == MPError.cloudServiceCapabilityMissing.rawValue {
+          debugPrint("musicPlayErrorNotification: cloudServiceCapabilityMissing")
+        }
+        if errorCode == MPError.networkConnectionFailed.rawValue {
+          debugPrint("musicPlayErrorNotification: networkConnectionFailed")
+        }
+        if errorCode == MPError.notFound.rawValue {
+          debugPrint("musicPlayErrorNotification: notFound")
+        }
+        if errorCode == MPError.notSupported.rawValue {
+          debugPrint("musicPlayErrorNotification: notSupported")
         }
       }
+      if #available(iOS 10.1, *) {
+        if errorCode == MPError.cancelled.rawValue {
+          debugPrint("musicPlayErrorNotification: cancelled")
+        }
+      }
+      if #available(iOS 10.3, *) {
+        if errorCode == MPError.requestTimedOut.rawValue {
+          debugPrint("musicPlayErrorNotification: requestTimedOut")
+        }
+      }
+    }
     #endif
   }
   
