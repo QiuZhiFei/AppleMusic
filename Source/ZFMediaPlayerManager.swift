@@ -323,6 +323,35 @@ extension ZFMediaPlayerManager {
     }
   }
   
+  open func getItems(successHandler: (([MPMediaItem])->())?,
+                     failtureHandler: ((Error?)->())?) {
+    guard #available(iOS 10.3, *) else {
+      if let failtureHandler = failtureHandler {
+        failtureHandler(nil)
+      }
+      return
+    }
+    guard let musicPlayer = self.musicPlayer as? MPMusicPlayerApplicationController else {
+      if let failtureHandler = failtureHandler {
+        failtureHandler(nil)
+      }
+      return
+    }
+    musicPlayer.performQueueTransaction({ (queue) in
+      //
+    }) { (queue, err) in
+      guard let err = err else {
+        if let successHandler = successHandler {
+          successHandler(queue.items)
+        }
+        return
+      }
+      if let failtureHandler = failtureHandler {
+        failtureHandler(err)
+      }
+    }
+  }
+  
 }
 
 fileprivate extension ZFMediaPlayerManager {
