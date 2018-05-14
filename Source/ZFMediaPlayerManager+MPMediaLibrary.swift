@@ -9,7 +9,23 @@
 import Foundation
 import MediaPlayer
 
+fileprivate var mediaLibraryQueueKey = "mediaLibraryQueueKey"
+
 extension ZFMediaPlayerManager {
+  
+  fileprivate var queue: MPMediaLibraryQueue {
+    set {
+      //
+    }
+    get {
+      if let value = objc_getAssociatedObject(self, &mediaLibraryQueueKey) as? MPMediaLibraryQueue {
+        return value
+      }
+      let queue = MPMediaLibraryQueue()
+      objc_setAssociatedObject(self, &mediaLibraryQueueKey, queue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      return queue
+    }
+  }
   
   @available(iOS 9.3, *)
   open func createPlaylistIfNeeded(with uuid: UUID,
@@ -43,11 +59,12 @@ extension ZFMediaPlayerManager {
   
   @available(iOS 9.3, *)
   open func addItem(identifier: String, mediaPlaylist: MPMediaPlaylist, handler: ((Error?)->())?) {
-    mediaPlaylist.addItem(withProductID: identifier) { (err) in
-      if let handler = handler {
-        handler(err)
-      }
-    }
+    self.queue.addItem(identifier, mediaPlaylist: mediaPlaylist)
+  }
+  
+  @available(iOS 9.3, *)
+  open func addItems(_ items: [String], mediaPlaylist: MPMediaPlaylist, handler: (()->())?) {
+    self.queue.addItems(items, mediaPlaylist: mediaPlaylist)
   }
   
   @available(iOS 9.3, *)
