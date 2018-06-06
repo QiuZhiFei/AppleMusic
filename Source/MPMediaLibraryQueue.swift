@@ -10,6 +10,7 @@ import MediaPlayer
 
 class MPMediaLibraryQueue: NSObject {
   
+  fileprivate var isLoading = false
   fileprivate var configs: [MPMediaPlaylist: MPMediaLibraryQueueConfig] = [:]
   
   @available(iOS 9.3, *)
@@ -31,16 +32,27 @@ class MPMediaLibraryQueue: NSObject {
 fileprivate extension MPMediaLibraryQueue {
   
   func addConfig(_ config: MPMediaLibraryQueueConfig) {
-    if config.items.count == 0 {
+    if self.isLoading {
       return
     }
+    addIntrinsicConfig(config)
+  }
+  
+  func addIntrinsicConfig(_ config: MPMediaLibraryQueueConfig) {
+    if config.items.count == 0 {
+      self.isLoading = false
+      return
+    }
+    self.isLoading = true
     let item = config.items.first!
     if #available(iOS 9.3, *) {
       config.mediaPlaylist.addItem(withProductID: item) {
         [weak self] (err) in
         guard let `self` = self else { return }
-        config.remove(item: item)
-        self.addConfig(config)
+        DispatchQueue.main.async {
+          config.remove(item: item)
+          self.addIntrinsicConfig(config)
+        }
       }
     } else {
       // Fallback on earlier versions
