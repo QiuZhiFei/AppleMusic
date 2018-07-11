@@ -10,7 +10,7 @@ import MediaPlayer
 
 class MPMediaLibraryQueue: NSObject {
   
-  fileprivate let queue = DispatchQueue(label: "com.apple.music.sync")
+  fileprivate let queue = DispatchQueue(label: "com.apple.music.zf.media.sync")
   fileprivate var configs: [MPMediaPlaylist: MPMediaLibraryQueueConfig] = [:]
   
   @available(iOS 9.3, *)
@@ -46,7 +46,6 @@ fileprivate extension MPMediaLibraryQueue {
         [weak self] (err) in
         guard let `self` = self else { return }
         if let err = err as? MPError {
-          debugPrint("err == ", err.code.rawValue)
           if err.code == MPError.Code.permissionDenied || err.code == MPError.Code.cloudServiceCapabilityMissing {
             // 不支持 sync，停止 sync
             self.endSyncTask(config: config)
