@@ -16,6 +16,7 @@ fileprivate let cellReuseIdentifier = "cellReuseIdentifier"
 class ViewController: UIViewController {
   
   fileprivate let tableView = UITableView(frame: .zero, style: .plain)
+  fileprivate let dataSource = ZFListViewNormalDataSource<ZFSong>()
   fileprivate let client = SonglistClient()
   
   fileprivate var listView: ZFListView<ZFSong>!
@@ -28,16 +29,19 @@ class ViewController: UIViewController {
     listView.configure(moreRefreshEnabled: false)
     
     listView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-    listView.cellForRowHandler = {
+    listView.tableView.delegate = dataSource
+    listView.tableView.dataSource = dataSource
+    
+    dataSource.cellForRowHandler = {
       (tableView, indexPath, data) in
       let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
-      cell.textLabel?.text = data.title
+      cell.textLabel?.text = data?.title
       return cell
     }
-    listView.didSelectRowHandler = {
+    dataSource.didSelectRowHandler = {
       [weak self] (tableView, indexPath, data) in
       guard let `self` = self else { return }
-      debugPrint("did select \(data)")
+      debugPrint("did select \(String(describing: data))")
       let storeIDs = self.getStoreIDs(indexPath: indexPath)
       ZFMediaPlayerManager.shared.playQueueWithStoreIDs(storeIDs)
 //      ZFMediaPlayerManager.shared.playQueueWithStoreIDs(["311169153"])
@@ -48,7 +52,7 @@ class ViewController: UIViewController {
     
     ZFMediaPlayerManager.shared.requestStorefrontIdentifier {
       [weak self] (countryCode) in
-      guard let `self` = self else { return }
+      guard self != nil else { return }
       debugPrint("countryCode == \(String(describing: countryCode))")
       if let countryCode = countryCode {
         ZFToast.show("当前国家支持 \(countryCode)")

@@ -51,7 +51,7 @@ extension ZFToast {
     }
   }
   
-  func hide(_ animated: Bool = true) {
+  @objc func hide(_ animated: Bool = true) {
     if Thread.isMainThread {
       intrinsicHide(animated)
     } else {
@@ -137,7 +137,7 @@ fileprivate class ZFToastView: UIView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    self.backgroundColor = UIColor(colorLiteralRed: 92/255.0, green: 188/255.0, blue: 125/255.0, alpha: 1)
+    self.backgroundColor = UIColor(red: 92/255.0, green: 188/255.0, blue: 125/255.0, alpha: 1)
     
     addSubview(label)
     label.zf_layoutToSuperview(attribute: .top, constant: 20)
@@ -162,7 +162,7 @@ extension ZFToastView {
 
 extension UIView {
   
-  func zf_layoutToSuperview(attribute: NSLayoutAttribute, constant: CGFloat) {
+  func zf_layoutToSuperview(attribute: NSLayoutConstraint.Attribute, constant: CGFloat) {
     guard let intrinsicSuperview = self.superview else { return }
 
     self.translatesAutoresizingMaskIntoConstraints = false

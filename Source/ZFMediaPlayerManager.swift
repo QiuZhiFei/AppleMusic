@@ -30,11 +30,11 @@ import StoreKit
 }
 
 public extension NSNotification {
-  static let musicPlaybackStateDidChange = Notification.Name("com.zf.musicPlaybackStateDidChange")
-  static let musicNowPlayingItemDidChange = Notification.Name("com.zf.musicNowPlayingItemDidChange")
-  static let musicVolumeDidChange = Notification.Name("com.zf.musicVolumeDidChange")
-  static let cloudServiceCapabilitiesTypeDidChange = Notification.Name("com.zf.cloudServiceCapabilitiesTypeDidChange")
-  static let musicPlayErrorNotification = Notification.Name("musicPlayErrorNotification")
+  @objc static let musicPlaybackStateDidChange = Notification.Name("com.zf.musicPlaybackStateDidChange")
+  @objc static let musicNowPlayingItemDidChange = Notification.Name("com.zf.musicNowPlayingItemDidChange")
+  @objc static let musicVolumeDidChange = Notification.Name("com.zf.musicVolumeDidChange")
+  @objc static let cloudServiceCapabilitiesTypeDidChange = Notification.Name("com.zf.cloudServiceCapabilitiesTypeDidChange")
+  @objc static let musicPlayErrorNotification = Notification.Name("musicPlayErrorNotification")
 }
 
 var mediaPlayerType: ZFMediaPlayerType = .system
@@ -45,7 +45,7 @@ public var musicCampaignToken: String?
 
 private var cloudServiceControllerKey = "cloudServiceControllerKey"
 
-open class ZFMediaPlayerManager: NSObject {
+@objcMembers open class ZFMediaPlayerManager: NSObject {
   
   open static let shared = ZFMediaPlayerManager()
   
@@ -59,7 +59,7 @@ open class ZFMediaPlayerManager: NSObject {
   open fileprivate(set) var storeIDs: [String] = []
   
   open var nowPlayerType: ZFMediaPlayerType {
-    if self.musicPlayer == MPMusicPlayerController.systemMusicPlayer() {
+    if self.musicPlayer == MPMusicPlayerController.systemMusicPlayer {
       return .system
     }
     return .application
@@ -107,9 +107,9 @@ open class ZFMediaPlayerManager: NSObject {
     
     switch mediaPlayerType {
     case .system:
-      self.musicPlayer = MPMusicPlayerController.systemMusicPlayer()
+      self.musicPlayer = MPMusicPlayerController.systemMusicPlayer
     case .application:
-      self.musicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+      self.musicPlayer = MPMusicPlayerController.applicationMusicPlayer
     }
     
     self.cloudServiceCapabilities.typeChangeHandler = {
@@ -233,7 +233,7 @@ extension ZFMediaPlayerManager {
   open func setQueueWithStoreIDs(_ storeIDs: [String]) {
     self.storeIDs = storeIDs
     if #available(iOS 9.3, *) {
-      self.musicPlayer.setQueueWithStoreIDs(storeIDs)
+      self.musicPlayer.setQueue(with: storeIDs)
     } else {
       debugPrint("\(#file): \(#line) \(#function) requires iOS 9.3 or later")
     }
@@ -271,7 +271,7 @@ extension ZFMediaPlayerManager {
       if startIndex < storeIDs.count {
         descriptor.startItemID = storeIDs[startIndex]
       }
-      self.musicPlayer.setQueueWith(descriptor)
+      self.musicPlayer.setQueue(with: descriptor)
       self.play()
     }
   }
@@ -312,9 +312,9 @@ extension ZFMediaPlayerManager {
   
   open func removeItem() {
     if #available(iOS 10.3, *) {
-      let player = MPMusicPlayerController.applicationQueuePlayer()
-      player.performQueueTransaction({ (queue) in
-        queue.removeItem(queue.items.last!)
+      let player = MPMusicPlayerController.applicationQueuePlayer
+      player.perform(queueTransaction: { (queue) in
+        queue.remove(queue.items.last!)
       }) { (queue, error) in
         //
       }
@@ -337,7 +337,7 @@ extension ZFMediaPlayerManager {
       }
       return
     }
-    musicPlayer.performQueueTransaction({ (queue) in
+    musicPlayer.perform(queueTransaction: { (queue) in
       //
     }) { (queue, err) in
       guard let err = err else {

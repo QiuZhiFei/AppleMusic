@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   
   
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+  private func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
     ZFMediaPlayerManager.configure(affiliateToken: nil)
     ZFMediaPlayerManager.configure(campaignToken: nil)
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       debugPrint("player: musicNowPlayingItemDidChange: \(String(describing: item?.zf_description)), index: \(ZFMediaPlayerManager.shared.indexOfNowPlayingItem)")
     }
     ZFMediaPlayerManager.shared.musicPlaybackStateDidChangeHandler = {
-      (item) in
+      (_, _) in
       debugPrint("player: musicPlaybackStateDidChangeHandler \(ZFMediaPlayerManager.shared.playbackState.rawValue)")
     }
     if #available(iOS 10.1, *) {

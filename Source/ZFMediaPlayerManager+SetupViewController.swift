@@ -43,10 +43,10 @@ extension ZFMediaPlayerManager: SKCloudServiceSetupViewControllerDelegate {
     }
     if #available(iOS 10.3, *) {
       if let token = musicAffiliateToken {
-        setupOptions[.affiliateTokenKey] = token
+        setupOptions[SKCloudServiceSetupOptionsKey.affiliateToken] = token
       }
       if let token = musicCampaignToken {
-        setupOptions[.campaignTokenKey] = token
+        setupOptions[SKCloudServiceSetupOptionsKey.campaignToken] = token
       }
     }
     setupViewController.load(options: setupOptions) { (didSucceedLoading, error) in

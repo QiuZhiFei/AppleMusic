@@ -12,8 +12,11 @@ target 'AppleMusic' do
   pod 'CocoaLumberjack/Swift'
   
   pod 'MJRefresh'
-  pod 'ZFListView', '~> 0.0.2'
-  
+  pod 'ZFListView', '~> 0.0.3'
+
+#  pod 'ZFListView',
+#    :path => '../ZFListView/ZFListView.podspec'
+
   pod 'ZFMediaPlayer',
     :path => 'ZFMediaPlayer.podspec'
 end

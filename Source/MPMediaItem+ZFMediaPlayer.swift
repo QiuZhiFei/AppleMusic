@@ -10,7 +10,7 @@ import MediaPlayer
 
 public extension MPMediaItem {
   
-  var appleID: String {
+  @objc var appleID: String {
     if #available(iOS 10.3, *) {
       return self.playbackStoreID
     } else {
@@ -18,7 +18,7 @@ public extension MPMediaItem {
     }
   }
   
-  var zf_description: String {
+  @objc var zf_description: String {
     return "MPMediaItem, id: \(self.appleID), title: \(self.title), playbackDuration: \(self.playbackDuration)"
   }
   
