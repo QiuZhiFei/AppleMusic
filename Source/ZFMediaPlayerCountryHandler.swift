@@ -11,7 +11,7 @@ open class ZFMediaPlayerCountryHandler {
   
   open fileprivate(set) var countrys: [String: String] = [:]
   
-  open static let shared = ZFMediaPlayerCountryHandler()
+  public static let shared = ZFMediaPlayerCountryHandler()
   
   init() {
     setup()

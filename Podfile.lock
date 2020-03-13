@@ -1,33 +1,29 @@
 PODS:
   - Alamofire (4.5.1)
-  - CocoaLumberjack/Default (3.3.0)
-  - CocoaLumberjack/Swift (3.3.0):
-    - CocoaLumberjack/Default
   - Himotoki (3.0.1)
   - MJRefresh (3.1.15.1)
   - PureLayout (3.0.2)
-  - SwiftyJSON (3.1.4)
-  - ZFListView (0.0.3)
-  - ZFMediaPlayer (0.0.6)
+  - SwiftyJSON (5.0.0)
+  - ZFListView (0.0.5)
+  - ZFMediaPlayer (0.0.7)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5.0)
-  - CocoaLumberjack/Swift
   - Himotoki (~> 3.0.1)
   - MJRefresh
   - PureLayout (~> 3.0.2)
-  - SwiftyJSON (~> 3.1.4)
-  - ZFListView (~> 0.0.3)
+  - SwiftyJSON (~> 5.0.0)
+  - ZFListView (~> 0.0.5)
   - ZFMediaPlayer (from `ZFMediaPlayer.podspec`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  http://github.intra.douban.com/mirror/Specs.git:
+    - SwiftyJSON
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
-    - CocoaLumberjack
     - Himotoki
     - MJRefresh
     - PureLayout
-    - SwiftyJSON
     - ZFListView
 
 EXTERNAL SOURCES:
@@ -36,14 +32,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
-  CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
   Himotoki: 85fda41d4d0e14f7228317a3b474175cdfb8f515
   MJRefresh: 5f8552bc25ca8751c010f621c1098dbdaacbccd6
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
-  ZFListView: 8b9143f09adfa3745b70692ca6ee37a6c59f828d
-  ZFMediaPlayer: 19828e8eba8240461cb0a59b961fb6edc3f2b301
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+  ZFListView: 48978bbb6b46dff2af5778e7a0de7dc3cc4202e0
+  ZFMediaPlayer: 9930e7d1f3abf3bc95a19a79a2343eefcfc9cd41
 
-PODFILE CHECKSUM: 9814be01d72659dc5da746aa6b343a001c4ed3bf
+PODFILE CHECKSUM: 16c8366900b83155eb1e7dea6b973aae5627d206
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.9.0

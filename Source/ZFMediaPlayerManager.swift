@@ -47,7 +47,7 @@ private var cloudServiceControllerKey = "cloudServiceControllerKey"
 
 @objcMembers open class ZFMediaPlayerManager: NSObject {
   
-  open static let shared = ZFMediaPlayerManager()
+  public static let shared = ZFMediaPlayerManager()
   
   open var musicPlaybackStateDidChangeHandler: ((_ newState: MPMusicPlaybackState, _ oldState: MPMusicPlaybackState)->())?
   open var musicNowPlayingItemDidChangeHandler: ((MPMediaItem?)->())?
@@ -132,7 +132,7 @@ private var cloudServiceControllerKey = "cloudServiceControllerKey"
 
 extension ZFMediaPlayerManager {
   
-  open static func authorizationType() -> ZFMusicAuthorizationType  {
+  public static func authorizationType() -> ZFMusicAuthorizationType  {
     if #available(iOS 9.3, *) {
       let type = ZFMediaPlayerManager.getAuthorizationType(status: SKCloudServiceController.authorizationStatus())
       return type
@@ -214,11 +214,11 @@ extension ZFMediaPlayerManager {
 
 extension ZFMediaPlayerManager {
   
-  open static func configure(affiliateToken: String?) {
+  public static func configure(affiliateToken: String?) {
     musicAffiliateToken = affiliateToken
   }
   
-  open static func configure(campaignToken: String?) {
+  public static func configure(campaignToken: String?) {
     musicCampaignToken = campaignToken
   }
   
@@ -226,7 +226,7 @@ extension ZFMediaPlayerManager {
     self.countryCode = countryCode
   }
   
-  open static func configure(type: ZFMediaPlayerType) {
+  public static func configure(type: ZFMediaPlayerType) {
     mediaPlayerType = type
   }
   
