@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "ZFMediaPlayer"
-  s.version      = "0.0.7"
+  s.version      = "0.0.8"
   s.summary      = "管理 apple music"
 
   # This description is used to generate tags and improve search results.
