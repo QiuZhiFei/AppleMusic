@@ -68,6 +68,9 @@ private var cloudServiceControllerKey = "cloudServiceControllerKey"
     return self.musicPlayer.indexOfNowPlayingItem
   }
   open var nowPlayingItem: MPMediaItem? {
+    if ZFMediaPlayerManager.authorizationType() != .authorized {
+      return nil
+    }
     return self.musicPlayer.nowPlayingItem
   }
   open var currentPlaybackTime: TimeInterval {
