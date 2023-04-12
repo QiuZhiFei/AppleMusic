@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (5.2.2)
   - Himotoki (3.0.1)
-  - MJRefresh (3.7.5)
+  - MJRefresh (3.5.0)
   - PureLayout (3.1.9)
   - SwiftyJSON (5.0.1)
   - ZFListView (0.0.5)
@@ -10,7 +10,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 5.2.2)
   - Himotoki (~> 3.0.1)
-  - MJRefresh
+  - MJRefresh (~> 3.5.0)
   - PureLayout (~> 3.1.7)
   - SwiftyJSON (~> 5.0.0)
   - ZFListView (~> 0.0.5)
@@ -32,12 +32,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   Himotoki: 85fda41d4d0e14f7228317a3b474175cdfb8f515
-  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   PureLayout: 5fb5e5429519627d60d079ccb1eaa7265ce7cf88
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   ZFListView: 48978bbb6b46dff2af5778e7a0de7dc3cc4202e0
   ZFMediaPlayer: 20ae370e0c7b740c45af990c934b0f5169f80c95
 
-PODFILE CHECKSUM: 5264412f471fb9c2e73db28d0e301ff89bd920d6
+PODFILE CHECKSUM: 1cbfc93b36bb5f810843f9f4ac7e772754f2f11d
 
 COCOAPODS: 1.10.0
