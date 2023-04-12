@@ -48,13 +48,13 @@ class ZFListViewRefreshNormal: NSObject, ZFListViewRefresh {
         handler()
       }
     })
-    normalHeader?.setTitle("下拉刷新", for: .idle)
-    normalHeader?.setTitle("释放立即刷新", for: .pulling)
-    normalHeader?.setTitle("正在加载", for: .refreshing)
-    normalHeader?.setTitle("准备加载", for: .willRefresh)
-    normalHeader?.setTitle("没有更多", for: .noMoreData)
-    
-    normalHeader?.lastUpdatedTimeLabel.isHidden = true
+//    normalHeader?.setTitle("下拉刷新", for: .idle)
+//    normalHeader?.setTitle("释放立即刷新", for: .pulling)
+//    normalHeader?.setTitle("正在加载", for: .refreshing)
+//    normalHeader?.setTitle("准备加载", for: .willRefresh)
+//    normalHeader?.setTitle("没有更多", for: .noMoreData)
+//
+//    normalHeader?.lastUpdatedTimeLabel.isHidden = true
     
     self.tableView.mj_header = normalHeader
   }
@@ -73,11 +73,11 @@ class ZFListViewRefreshNormal: NSObject, ZFListViewRefresh {
         handler()
       }
     })
-    footer?.setTitle("上拉刷新", for: .idle)
-    footer?.setTitle("释放立即刷新", for: .pulling)
-    footer?.setTitle("正在加载", for: .refreshing)
-    footer?.setTitle("准备加载", for: .willRefresh)
-    footer?.setTitle("没有更多", for: .noMoreData)
+//    footer?.setTitle("上拉刷新", for: .idle)
+//    footer?.setTitle("释放立即刷新", for: .pulling)
+//    footer?.setTitle("正在加载", for: .refreshing)
+//    footer?.setTitle("准备加载", for: .willRefresh)
+//    footer?.setTitle("没有更多", for: .noMoreData)
     self.tableView.mj_footer = footer
   }
   

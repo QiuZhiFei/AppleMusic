@@ -26,7 +26,12 @@ class ViewController: UIViewController {
     
     let refresh = ZFListViewRefreshNormal(tableView)
     listView = ZFListView(frame: .zero, refresh: refresh, client: client)
+    listView.configure(topRefreshEnabled: true)
     listView.configure(moreRefreshEnabled: false)
+    listView.listChangedHandler = { [weak self] songs in
+      self?.dataSource.configure(list: songs)
+      self?.tableView.reloadData()
+    }
     
     listView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     listView.tableView.delegate = dataSource
@@ -46,9 +51,10 @@ class ViewController: UIViewController {
       ZFMediaPlayerManager.shared.playQueueWithStoreIDs(storeIDs)
 //      ZFMediaPlayerManager.shared.playQueueWithStoreIDs(["311169153"])
     }
-    
+
     view.addSubview(listView)
-    _ = listView.autoPinEdgesToSuperviewEdges(with: .zero)
+//    _ = listView.autoPinEdgesToSuperviewEdges(with: .zero)
+    listView.frame = self.view.bounds
     
     ZFMediaPlayerManager.shared.requestStorefrontIdentifier {
       [weak self] (countryCode) in
@@ -62,6 +68,8 @@ class ViewController: UIViewController {
         ZFToast.show("当前国家不支持")
       }
     }
+
+    ZFMediaPlayerManager.shared.playQueueWithStoreIDs(["1442344445"])
   }
 
   override func didReceiveMemoryWarning() {

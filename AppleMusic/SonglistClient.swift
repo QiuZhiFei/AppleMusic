@@ -32,8 +32,8 @@ class SonglistClient: ZFListClient<ZFSong> {
       return
     }
     parameters["country"] = countryCode
-    
-    Alamofire.request("https://itunes.apple.com/search",
+
+    AF.request("https://itunes.apple.com/search",
                       method: .get,
                       parameters: parameters)
       .responseJSON(completionHandler: { (response) in
